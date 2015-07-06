@@ -43,9 +43,15 @@ when 'debian'
 when 'rhel'
   include_recipe 'yum::default'
 
+  yum_key 'GPG-KEY-jenkins-ci' do
+    url node['jenkins']['master']['repository_key']
+    action :add
+  end
+
   yum_repository 'jenkins-ci' do
-    baseurl node['jenkins']['master']['repository']
-    gpgkey  node['jenkins']['master']['repository_key']
+    url node['jenkins']['master']['repository']
+    key 'GPG-KEY-jenkins-ci'
+    action :add
   end
 
   package 'jenkins' do
